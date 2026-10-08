@@ -68,6 +68,10 @@ async def upload_file(file: UploadFile) -> FileUploadResponse:
     )
 
     # --- Synchronous Processing ---
+    import tempfile
+    from app.utils.zip_utils import safe_extract_zip, find_shapefile
+    from app.services.file_processor import process_shapefile
+
     processed_data = {}
     if file_type == "kml":
         try:
@@ -77,8 +81,23 @@ async def upload_file(file: UploadFile) -> FileUploadResponse:
             logger.error("KML processing failed: %s", exc)
             status_str = "FAILED"
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+    elif file_type == "zip":
+        try:
+            with tempfile.TemporaryDirectory() as tmp_dir:
+                tmp_path = Path(tmp_dir)
+                safe_extract_zip(saved_path, tmp_path)
+                shp_path = find_shapefile(tmp_path)
+                processed_data = process_shapefile(shp_path)
+            status_str = "COMPLETED"
+        except ValueError as exc:
+            logger.error("Shapefile processing failed: %s", exc)
+            status_str = "FAILED"
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+        except Exception as exc:
+            logger.error("Unexpected error processing Shapefile: %s", exc)
+            status_str = "FAILED"
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal processing error")
     else:
-        # ZIP/Shapefile placeholder (Milestone 4)
         status_str = "PENDING"
 
     return FileUploadResponse(
