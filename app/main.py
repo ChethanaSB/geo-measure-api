@@ -3,8 +3,9 @@ import os
 
 from contextlib import asynccontextmanager
 
+from pathlib import Path
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from app.api.routes import files as files_router
 from app.core.config import settings
@@ -48,6 +49,16 @@ def create_app() -> FastAPI:
     # Ensure the upload directory exists on startup
     os.makedirs(settings.upload_dir, exist_ok=True)
     logger.info("Upload directory ready: %s", settings.upload_dir)
+
+    @app.get(
+        "/",
+        summary="Web Dashboard",
+        description="Interactive single-page dashboard to upload and view geospatial measurements.",
+        include_in_schema=False,
+    )
+    def index() -> FileResponse:
+        static_index = Path(__file__).parent / "static" / "index.html"
+        return FileResponse(static_index)
 
     @app.get(
         "/health",
