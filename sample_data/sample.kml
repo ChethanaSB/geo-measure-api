@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Sample Data</name>
+    <Placemark>
+      <name>Site A</name>
+      <description>Sample Polygon</description>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -122.366278,37.818844,0
+              -122.365248,37.819267,0
+              -122.365640,37.819861,0
+              -122.366669,37.819429,0
+              -122.366278,37.818844,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>Path B</name>
+      <LineString>
+        <coordinates>
+          -122.366278,37.818844,0
+          -122.365248,37.819267,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+    <Placemark>
+      <name>Point C</name>
+      <Point>
+        <coordinates>
+          -122.366278,37.818844,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

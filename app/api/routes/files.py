@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, status
 
 from app.core.config import settings
 from app.schemas.file import FileUploadResponse
+from app.services.file_processor import process_kml
 from app.utils.file_utils import save_upload, validate_file
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,7 @@ router = APIRouter(prefix="/api/files", tags=["Files"])
         "Returns an upload receipt with a file ID for subsequent requests."
     ),
     responses={
-        400: {"description": "Invalid file type or empty file"},
+        400: {"description": "Invalid file type, empty file, or parsing error"},
         413: {"description": "File exceeds the maximum allowed size"},
     },
 )
@@ -66,10 +67,27 @@ async def upload_file(file: UploadFile) -> FileUploadResponse:
         size_bytes,
     )
 
+    # --- Synchronous Processing ---
+    processed_data = {}
+    if file_type == "kml":
+        try:
+            processed_data = process_kml(saved_path)
+            status_str = "COMPLETED"
+        except ValueError as exc:
+            logger.error("KML processing failed: %s", exc)
+            status_str = "FAILED"
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+    else:
+        # ZIP/Shapefile placeholder (Milestone 4)
+        status_str = "PENDING"
+
     return FileUploadResponse(
         id=file_id,
         filename=file.filename,
         file_type=file_type,
         size_bytes=size_bytes,
-        status="UPLOADED",
+        status=status_str,
+        feature_count=processed_data.get("feature_count"),
+        crs=processed_data.get("crs"),
+        features=processed_data.get("features"),
     )
