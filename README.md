@@ -9,7 +9,6 @@
 
 A production-grade, mathematically accurate REST API and interactive web dashboard that accepts geospatial files (KML and Shapefile archives), extracts multi-geometry features, handles intelligent CRS transformations, and calculates true metric measurements (area in $\text{m}^2$, length in $\text{m}$).
 
-Built as an engineering assignment for **AEREO** using **FastAPI**, **GeoPandas**, **PyProj**, **SQLAlchemy**, and **pytest**.
 
 ---
 
