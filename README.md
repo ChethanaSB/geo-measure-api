@@ -2,9 +2,6 @@
 
 A clean, well-structured REST API that accepts geospatial files (KML and Shapefile), extracts features, handles CRS transformations, and returns accurate metric measurements.
 
-Built as an internship assignment for **AEREO** using FastAPI, GeoPandas, SQLAlchemy, and pytest.
-
----
 
 ## Features
 
