@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel
@@ -23,11 +24,37 @@ class FileUploadResponse(BaseModel):
     size_bytes: int
     status: str
     
-    # We return the extracted data directly in the upload response for now
-    # as per the assignment's synchronous processing allowance.
     feature_count: int | None = None
     crs: str | None = None
     measurement_crs: str | None = None
     features: list[FeatureResponse] | None = None
 
     model_config = {"from_attributes": True}
+
+
+class FileInfoResponse(BaseModel):
+    """Response for GET /api/files/{id}/ — file metadata without measurement details."""
+
+    id: str
+    filename: str
+    file_type: str
+    size_bytes: int
+    status: str
+    error_message: str | None = None
+    feature_count: int | None = None
+    crs: str | None = None
+    measurement_crs: str | None = None
+    created_at: datetime | None = None
+
+    model_config = {"from_attributes": True}
+
+
+class MeasurementsResponse(BaseModel):
+    """Response for GET /api/files/{id}/measurements/ — full feature measurements."""
+
+    file_id: str
+    filename: str
+    crs: str | None = None
+    measurement_crs: str | None = None
+    feature_count: int | None = None
+    features: list[FeatureResponse] | None = None

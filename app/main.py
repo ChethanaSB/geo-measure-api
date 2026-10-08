@@ -1,11 +1,15 @@
 import logging
 import os
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 from app.api.routes import files as files_router
 from app.core.config import settings
+from app.database.database import Base, engine
+from app.database import models
 
 # Configure module-level logger
 logging.basicConfig(
@@ -16,11 +20,22 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup actions
+    logger.info("Initializing database schema...")
+    Base.metadata.create_all(bind=engine)
+    yield
+    # Shutdown actions
+    logger.info("Application shutting down...")
+
+
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
     app = FastAPI(
         title=settings.app_name,
         version=settings.app_version,
+        lifespan=lifespan,
         description=(
             "A REST API that accepts geospatial files (KML, Shapefile ZIP), "
             "extracts features, handles CRS transformations, and returns "
