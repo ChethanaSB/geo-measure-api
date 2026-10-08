@@ -23,14 +23,14 @@ def calculate_measurement(geom: BaseGeometry | None, geom_type: str) -> dict[str
     if "polygon" in g_type:
         return {
             "measurement": geom.area,
-            "unit": "raw",  # To be replaced with m² in M6
+            "unit": "m²",
             "measurement_status": "COMPLETED"
         }
     
     elif "linestring" in g_type:
         return {
             "measurement": geom.length,
-            "unit": "raw",  # To be replaced with m in M6
+            "unit": "m",
             "measurement_status": "COMPLETED"
         }
         

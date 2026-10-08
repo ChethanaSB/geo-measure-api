@@ -27,6 +27,7 @@ class FileUploadResponse(BaseModel):
     # as per the assignment's synchronous processing allowance.
     feature_count: int | None = None
     crs: str | None = None
+    measurement_crs: str | None = None
     features: list[FeatureResponse] | None = None
 
     model_config = {"from_attributes": True}

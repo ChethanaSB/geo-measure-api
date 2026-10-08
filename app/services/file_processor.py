@@ -11,18 +11,26 @@ logger = logging.getLogger(__name__)
 
 def _extract_features(gdf: gpd.GeoDataFrame) -> dict[str, Any]:
     """Helper to extract features from a GeoDataFrame into the required JSON structure."""
+    from app.services.crs import prepare_projected_geometries
+    from app.services.measurement import calculate_measurement
+
     crs = str(gdf.crs) if gdf.crs else None
+    
+    # We may raise a ValueError here if CRS is missing
+    projected_geoms, measurement_crs = prepare_projected_geometries(gdf)
+
     features = []
     
     for idx, row in gdf.iterrows():
-        geom = row.geometry
+        original_geom = row.geometry
+        projected_geom = projected_geoms.iloc[idx]
         
-        if geom is None or geom.is_empty:
+        if original_geom is None or original_geom.is_empty:
             geom_type = "None"
             geometry_json = None
         else:
-            geom_type = geom.geom_type
-            geometry_json = geom.__geo_interface__
+            geom_type = original_geom.geom_type
+            geometry_json = original_geom.__geo_interface__
 
         properties = {
             col: row[col]
@@ -39,8 +47,7 @@ def _extract_features(gdf: gpd.GeoDataFrame) -> dict[str, Any]:
             else:
                 clean_properties[k] = v
 
-        from app.services.measurement import calculate_measurement
-        meas_result = calculate_measurement(geom, geom_type)
+        meas_result = calculate_measurement(projected_geom, geom_type)
 
         feature = {
             "feature_id": str(idx),
@@ -57,6 +64,7 @@ def _extract_features(gdf: gpd.GeoDataFrame) -> dict[str, Any]:
     result = {
         "feature_count": len(features),
         "crs": crs,
+        "measurement_crs": measurement_crs,
         "features": features
     }
     

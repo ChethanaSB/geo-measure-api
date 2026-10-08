@@ -108,5 +108,6 @@ async def upload_file(file: UploadFile) -> FileUploadResponse:
         status=status_str,
         feature_count=processed_data.get("feature_count"),
         crs=processed_data.get("crs"),
+        measurement_crs=processed_data.get("measurement_crs"),
         features=processed_data.get("features"),
     )
