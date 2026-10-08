@@ -1,10 +1,19 @@
 # GeoMeasure API
 
-A clean, well-structured REST API that accepts geospatial files (KML and Shapefile), extracts features, handles CRS transformations, and returns accurate metric measurements.
+A clean, well-structured REST API and interactive dashboard that accepts geospatial files (KML and Shapefile), extracts features, handles CRS transformations, and returns accurate metric measurements.
 
+
+## 📸 Interactive Web Dashboard
+
+![GeoMeasure Dashboard Preview](docs/images/dashboard_preview.png)
+
+> **Live UI:** Access the interactive dashboard at `http://localhost:8000/` to drag-and-drop geospatial files, view interactive Leaflet map previews, and inspect feature-by-feature metric measurements in real time.
+
+---
 
 ## Features
 
+- **Interactive Web Dashboard** — Drag-and-drop file upload with live Leaflet map rendering & measurements table
 - **Upload KML files** or **ZIP archives containing Shapefiles**
 - **Extract geospatial features** — geometry type, geometry, CRS, and properties
 - **Automatic CRS handling** — detects geographic (EPSG:4326) coordinates and projects to the appropriate UTM zone for accurate measurements
