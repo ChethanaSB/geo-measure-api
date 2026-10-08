@@ -4,6 +4,7 @@ import os
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
+from app.api.routes import files as files_router
 from app.core.config import settings
 
 # Configure module-level logger
@@ -47,6 +48,8 @@ def create_app() -> FastAPI:
                 "version": settings.app_version,
             }
         )
+
+    app.include_router(files_router.router)
 
     return app
 
