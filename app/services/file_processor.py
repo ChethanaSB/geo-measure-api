@@ -39,14 +39,18 @@ def _extract_features(gdf: gpd.GeoDataFrame) -> dict[str, Any]:
             else:
                 clean_properties[k] = v
 
+        from app.services.measurement import calculate_measurement
+        meas_result = calculate_measurement(geom, geom_type)
+
         feature = {
             "feature_id": str(idx),
             "geometry_type": geom_type,
             "geometry": geometry_json,
             "crs": crs,
             "properties": clean_properties,
-            "measurement": None,
-            "measurement_status": "PENDING",
+            "measurement": meas_result["measurement"],
+            "unit": meas_result["unit"],
+            "measurement_status": meas_result["measurement_status"],
         }
         features.append(feature)
 

@@ -10,6 +10,7 @@ class FeatureResponse(BaseModel):
     crs: str | None
     properties: dict[str, Any]
     measurement: float | None = None
+    unit: str | None = None
     measurement_status: str | None = None
 
 
