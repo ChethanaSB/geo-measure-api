@@ -5,9 +5,13 @@ A clean, well-structured REST API and interactive dashboard that accepts geospat
 
 ## 📸 Interactive Web Dashboard
 
-![GeoMeasure Dashboard Preview](docs/images/dashboard_preview.png)
-
 > **Live UI:** Access the interactive dashboard at `http://localhost:8000/` to drag-and-drop geospatial files, view interactive Leaflet map previews, and inspect feature-by-feature metric measurements in real time.
+
+### 1. KML File Processing (Mixed Geometries: Polygon, LineString, Point)
+![KML Upload Preview](docs/images/dashboard_preview.png)
+
+### 2. Shapefile ZIP Processing (Secure Extraction & Projection)
+![Shapefile ZIP Upload Preview](docs/images/dashboard_zip_preview.png)
 
 ---
 
